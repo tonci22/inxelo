@@ -13,7 +13,7 @@ const Login = () => {
 
   const users = [{ username: "Ante", password: "test" }];
 
-  const formHandler = (event: React.FormEvent) => {
+  const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
     const account = users.find((user) => user.username === username);
@@ -29,7 +29,7 @@ const Login = () => {
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" onSubmit={formHandler}>
+    <Box component="form" noValidate autoComplete="off" onSubmit={formSubmitHandler}>
       <CustomTextInput
         type="text"
         value={username}

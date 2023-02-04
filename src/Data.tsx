@@ -1,4 +1,4 @@
-const Flightss = {
+const Flights = {
   "-NNLNTACHAemZ4FZuqv4": {
     aircraftRegistration: "9A-QTK",
     aircraftType: "0A210",
@@ -43,4 +43,4 @@ const Flightss = {
   }
 };
 
-export default Flightss;
+export default Flights;
