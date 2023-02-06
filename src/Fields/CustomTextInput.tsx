@@ -5,7 +5,7 @@ type Props = {
   type: string;
   label: string;
   value: string;
-
+  defaulfValue: string;
   onChange: () => void;
 };
 
@@ -13,6 +13,7 @@ const CustomTextInput = (props: Props) => {
   return (
     <TextField
       type={props.type}
+      defaultValue={props.defaulfValue}
       value={props.value}
       label={props.label}
       style={{ margin: "10px" }}

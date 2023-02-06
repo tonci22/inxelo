@@ -42,7 +42,7 @@ const Login = () => {
         label="Password"
         onChange={(event) => setPassword(event.target.value)}
       ></CustomTextInput>
-      <CustomButton>LOGIN</CustomButton>
+      <CustomButton type="submit">LOGIN</CustomButton>
     </Box>
   );
 };
