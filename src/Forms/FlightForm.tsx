@@ -21,7 +21,6 @@ const FlightForm = (props: Props) => {
           ".json"
       )
       .then(() => {
-        console.log("flight deleted");
         props.onReRender();
       });
   };

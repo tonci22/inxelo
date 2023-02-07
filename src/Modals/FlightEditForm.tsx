@@ -57,7 +57,7 @@ const Modal = (props: Props) => {
     >
       <Card className={styles.modal}>
         <header className={styles.header}>
-          <h2>Add new flight</h2>
+          <h2>Edit flight information</h2>
         </header>
         <div className={styles.message}>
           <CustomTextInput
@@ -84,7 +84,7 @@ const Modal = (props: Props) => {
         </div>
         <footer className={styles.button}>
           <CustomButton onClick={props.onShowModal}>CANCEL</CustomButton>
-          <CustomButton type="submit">CREATE</CustomButton>
+          <CustomButton type="submit">Edit</CustomButton>
         </footer>
       </Card>
     </Box>
