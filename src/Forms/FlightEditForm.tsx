@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./FlightFormEdit.module.css";
+import styles from "./FlightEditForm.module.css";
 import ReactDOM from "react-dom";
 import CustomButton from "../Fields/CustomButton.tsx";
 import Card from "../Helpers/Card.tsx";
@@ -7,10 +7,12 @@ import IFlight from "../Helpers/IFlight.tsx";
 import CustomTextInput from "../Fields/CustomTextInput.tsx";
 import { Box } from "@mui/material";
 import axios from "axios";
-import dayjs, { Dayjs } from "dayjs";
-import { PutFlightLink } from "../Service/API_LINK.tsx";
-import CustomBackdrop from "./CustomBackdrop.tsx";
+import { flightLinkWithKey } from "../Service/APILink.tsx";
+import CustomBackdrop from "../Modals/CustomBackdrop.tsx";
 import CustomDateTimePicker from "../Fields/CustomDateTimePicker.tsx";
+import { useDispatch } from "react-redux";
+import { types } from "../redux/store.tsx";
+import dayjs, { Dayjs } from "dayjs";
 
 type Props = {
   onShowModal: () => void;
@@ -20,19 +22,20 @@ type Props = {
 };
 
 const Modal = (props: Props) => {
-  const arrDate = new Date(props.value.dateArrival);
-  const depDate = new Date(props.value.dateDeparture);
-
+  
   const [registration, setRegistration] = useState<string>(props.value.aircraftRegistration);
   const [type, setType] = useState<string>(props.value.aircraftType);
-  const [dateTimePickerArrival, setDateTimePickerArrival] = useState<Dayjs | null>(dayjs(arrDate).format());
-  const [dateTimePickerDeparture, setDateTimePickerDeparture] = useState<Dayjs | null>(dayjs(depDate).format());
+  const [dateTimePickerArrival, setDateTimePickerArrival] = useState<Dayjs | null>(dayjs(new Date(props.value.dateArrival)));
+  const [dateTimePickerDeparture, setDateTimePickerDeparture] = useState<Dayjs | null>(dayjs(new Date(props.value.dateDeparture)));
   const [flightNumber, setFlightNumber] = useState<string>(props.value.flightNumber);
+
+  const dispatch = useDispatch();
 
   const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const print: IFlight = {
+    const flightData: IFlight = {
+      key: props.value.key,
       aircraftRegistration: registration,
       aircraftType: type,
       dateArrival: dateTimePickerArrival,
@@ -40,10 +43,11 @@ const Modal = (props: Props) => {
       flightNumber: flightNumber,
     };
 
-    axios.put(PutFlightLink(props.value.key), print).then(() => {
+    axios.put(flightLinkWithKey(props.value.key), flightData).then(() => {
+      dispatch({ type: types.SET_FLIGHT, flight: flightData });
       props.onReRender();
     });
-
+    console.log(flightData);
     props.onShowModal(false);
   };
 
@@ -69,12 +73,12 @@ const Modal = (props: Props) => {
           <CustomDateTimePicker
             label="Date of Arrival"
             value={dateTimePickerArrival}
-            onChange={(e) => setDateTimePickerArrival(e)}
+            onChange={(e) => setDateTimePickerArrival(e.target.value)}
           />
           <CustomDateTimePicker
             label="Date of Departure"
             value={dateTimePickerDeparture}
-            onChange={(e) => setDateTimePickerDeparture(e)}
+            onChange={(e) => setDateTimePickerDeparture(e.target.value)}
           />
           <CustomTextInput
             label="Flight Number"

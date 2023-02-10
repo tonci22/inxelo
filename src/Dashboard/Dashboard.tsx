@@ -3,35 +3,32 @@ import { Card, Grid } from "@mui/material";
 import CustomButton from "../Fields/CustomButton.tsx";
 import FlightForm from "../Forms/FlightForm.tsx";
 import axios from "axios";
-import { GetAllFlightsLink } from "../Service/API_LINK.tsx";
+import { flightLink } from "../Service/APILink.tsx";
 import IFlight from "../Helpers/IFlight.tsx";
 import NewFlightModal from "../Forms/NewFlightForm.tsx";
-/* import GetAllFlights from "../Service/GetAllFlights.tsx"; */
+import { useSelector, useDispatch } from "react-redux";
+import { types } from "../redux/store.tsx";
+import formatAllFlights from "../HelperMethods/FormatAPIData.tsx";
 
 const Dashboard = () => {
-  const [reRenderer, setReRender] = useState(false);
-  const [getFlights, setGetFlights] = useState<{} | null>({});
-  const [showModal, setShowModal] = useState(false);
+  const [reRenderer, setReRender] = useState<boolean>(false);
 
-  const allFlights: IFlight[] = [];
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const flights = useSelector((state) => state.flights);
+
+  let allFlights: IFlight[] = [];
 
   useEffect(() => {
-    axios.get(GetAllFlightsLink).then((data) => {
-      setGetFlights(data?.data);
+    axios.get(flightLink).then((data) => {
+      dispatch({ type: types.SET_FLIGHTS, flights: data?.data });
     });
-  }, [reRenderer]);
+  }, [dispatch, reRenderer]);
 
-  if (getFlights) {
-    Object.keys(getFlights).forEach((key) => {
-      allFlights.push({
-        key: key,
-        aircraftRegistration: getFlights[key].aircraftRegistration,
-        aircraftType: getFlights[key].aircraftType,
-        dateArrival: getFlights[key].dateArrival,
-        dateDeparture: getFlights[key].dateDeparture,
-        flightNumber: getFlights[key].flightNumber,
-      });
-    });
+  if (flights) {
+    allFlights = formatAllFlights(flights);
+    console.log(flights);
   }
 
   return (
@@ -44,13 +41,13 @@ const Dashboard = () => {
         />
       )}
       <Grid container spacing={5} padding={5}>
-        {getFlights &&
+        {flights &&
           allFlights.map((flight) => (
             <Grid key={flight.key} item>
               <FlightForm value={flight} onReRender={() => setReRender((prevState) => !prevState)}></FlightForm>
             </Grid>
           ))}
-        {!getFlights && (
+        {!flights && (
           <Card style={{ padding: "5px", margin: "10px", backgroundColor: "#be6464" }}>
             <p>No flights. Please add new flights.</p>
           </Card>
