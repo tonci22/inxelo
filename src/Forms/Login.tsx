@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import CustomTextInput from "../Fields/CustomTextInput.tsx";
 import CustomButton from "../Fields/CustomButton.tsx";
 import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
+import Card from "../Helpers/Card.tsx";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,28 +24,34 @@ const Login = () => {
       setAuthenticated(true);
       localStorage.setItem("authenticated", "true");
       navigate("/dashboard");
-    } 
+    }
 
     setUsername("");
     setPassword("");
   };
 
   return (
-    <Box component="form" noValidate autoComplete="off" onSubmit={formSubmitHandler}>
-      <CustomTextInput
-        type="text"
-        value={username}
-        label="Username"
-        onChange={(event) => setUsername(event.target.value)}
-      ></CustomTextInput>
-      <CustomTextInput
-        type="password"
-        value={password}
-        label="Password"
-        onChange={(event) => setPassword(event.target.value)}
-      ></CustomTextInput>
-      <CustomButton type="submit">LOGIN</CustomButton>
-    </Box>
+    <div className={styles.loginBackgroundImage}>
+    <Card className={styles.loginFormCentered}>
+      <Box component="form" noValidate onSubmit={formSubmitHandler}>
+        <div>
+          <CustomTextInput
+            type="text"
+            value={username}
+            label="Username"
+            onChange={(event) => setUsername(event.target.value)}
+          ></CustomTextInput>
+          <CustomTextInput
+            type="password"
+            value={password}
+            label="Password"
+            onChange={(event) => setPassword(event.target.value)}
+          ></CustomTextInput>
+        </div>
+        <CustomButton type="submit">LOGIN</CustomButton>
+      </Box>
+    </Card>
+    </div>
   );
 };
 

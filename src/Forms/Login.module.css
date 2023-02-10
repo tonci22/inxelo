@@ -1,0 +1,19 @@
+.loginFormCentered {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  z-index: 101;
+  background-color: aliceblue;
+  width: 250px;
+  margin-left: -125px;
+}
+
+.loginBackgroundImage {
+  background-image: url(../../public/pics/planeBackground.png);
+
+  height: 100vh;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

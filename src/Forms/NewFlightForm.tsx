@@ -5,10 +5,10 @@ import { Box } from "@mui/system";
 import CustomButton from "../Fields/CustomButton.tsx";
 import IFlight from "../Helpers/IFlight.js";
 import axios from "axios";
-import { PostFlightLink } from "../Service/API_LINK.tsx";
+import { flightLink } from "../Service/APILink.tsx";
 import ReactDOM from "react-dom";
 import CustomBackdrop from "../Modals/CustomBackdrop.tsx";
-import styles from "../Modals/FlightFormEdit.module.css";
+import styles from "./FlightEditForm.module.css";
 import Card from "../Helpers/Card.tsx";
 
 type Props = {
@@ -18,7 +18,6 @@ type Props = {
 };
 
 const NewFlightForm = (props: Props) => {
-
 
   const [registration, setRegistration] = useState<string>("");
   const [type, setType] = useState<string>("");
@@ -37,8 +36,7 @@ const NewFlightForm = (props: Props) => {
       flightNumber: flightNumber,
     };
 
-    //TODO ovo stavit u servis i doradit
-    axios.post(PostFlightLink, print).then(() => {
+    axios.post(flightLink, print).then(() => {
       props.onReRender();
     });
 
