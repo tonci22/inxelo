@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import IFlight from "../Helpers/IFlight.tsx";
 import dayjs from "dayjs";
-import formatAllFlights, { removeObjectByKey } from "../HelperMethods/FormatAPIData.tsx";
+import formatAllFlights from "../HelperMethods/FormatAPIData.tsx";
 import { types } from "./constants/types.tsx";
 
 const initialState: IFlight = {
@@ -38,7 +38,7 @@ const flightFormReducer = (state = initialState, action) => {
     case types.SET_FLIGHTS:
       return { ...state, flights: formatAllFlights(action.flights) };
     case types.SET_DELETE:
-      return { ...state, flights: removeObjectByKey(state, action.key) };
+      return { ...state, flights: state.flights.filter((obj) => obj.key !== action.key) };
     default:
       return state;
   }

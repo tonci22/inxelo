@@ -17,11 +17,3 @@ export default function formatAllFlights(nestedObject) {
   });
   return allFlights;
 }
-
-export function removeObjectByKey(obj, keyId) {
-  return Object.keys(obj)
-    .filter((key) => key.includes(keyId))
-    .reduce((cur, key) => {
-      return Object.assign(cur, { [key]: obj[key] });
-    }, {});
-}
