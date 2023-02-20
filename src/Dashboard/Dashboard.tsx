@@ -11,11 +11,8 @@ import { types } from "../redux/store.tsx";
 import formatAllFlights from "../HelperMethods/FormatAPIData.tsx";
 
 const Dashboard = () => {
-  const [reRenderer, setReRender] = useState<boolean>(false);
-
   const [showModal, setShowModal] = useState<boolean>(false);
   const dispatch = useDispatch();
-
   const flights = useSelector((state) => state.flights);
 
   let allFlights: IFlight[] = [];
@@ -24,30 +21,24 @@ const Dashboard = () => {
     axios.get(flightLink).then((data) => {
       dispatch({ type: types.SET_FLIGHTS, flights: data?.data });
     });
-  }, [dispatch, reRenderer]);
+  }, [dispatch]);
 
   if (flights) {
     allFlights = formatAllFlights(flights);
-    console.log(flights);
   }
 
   return (
     <React.Fragment>
       <CustomButton onClick={() => setShowModal(true)}>CREATE NEW FLIGHT</CustomButton>
-      {showModal && (
-        <NewFlightModal
-          onShowModal={() => setShowModal((prevState) => !prevState)}
-          onReRender={() => setReRender((prevState) => !prevState)}
-        />
-      )}
+      {showModal && <NewFlightModal onShowModal={() => setShowModal((prevState) => !prevState)} />}
       <Grid container spacing={5} padding={5}>
         {flights &&
           allFlights.map((flight) => (
             <Grid key={flight.key} item>
-              <FlightForm value={flight} onReRender={() => setReRender((prevState) => !prevState)}></FlightForm>
+              <FlightForm value={flight}></FlightForm>
             </Grid>
           ))}
-        {!flights && (
+        {(flights.length === 0 || !flights) && (
           <Card style={{ padding: "5px", margin: "10px", backgroundColor: "#be6464" }}>
             <p>No flights. Please add new flights.</p>
           </Card>

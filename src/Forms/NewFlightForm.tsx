@@ -10,20 +10,22 @@ import ReactDOM from "react-dom";
 import CustomBackdrop from "../Modals/CustomBackdrop.tsx";
 import styles from "./FlightEditForm.module.css";
 import Card from "../Helpers/Card.tsx";
+import { useDispatch } from "react-redux";
+import { types } from "../redux/store.tsx";
 
 type Props = {
   onChange: () => void;
   onShowModal: () => void;
-  onReRender:()=>void;
 };
 
 const NewFlightForm = (props: Props) => {
-
   const [registration, setRegistration] = useState<string>("");
   const [type, setType] = useState<string>("");
   const [dateTimePickerArrival, setDateTimePickerArrival] = useState<Date>(new Date());
   const [dateTimePickerDeparture, setDateTimePickerDeparture] = useState<Date>(new Date());
   const [flightNumber, setFlightNumber] = useState<string>("");
+
+  const dispatch = useDispatch();
 
   const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,8 +38,8 @@ const NewFlightForm = (props: Props) => {
       flightNumber: flightNumber,
     };
 
-    axios.post(flightLink, print).then(() => {
-      props.onReRender();
+    axios.post(flightLink, print).then((response) => {
+      dispatch({ type: types.CREATE_FLIGHT, flight: response.data });
     });
 
     setRegistration("");
@@ -95,8 +97,8 @@ const NewFlightForm = (props: Props) => {
 const NewFlightModal = (props: Props) => {
   return (
     <React.Fragment>
-      <CustomBackdrop onShowModal={props.onShowModal}/>
-      {ReactDOM.createPortal(<NewFlightForm onShowModal={props.onShowModal} onReRender={props.onReRender} />, document.getElementById("formModal-root"))}
+      <CustomBackdrop onShowModal={props.onShowModal} />
+      {ReactDOM.createPortal(<NewFlightForm onShowModal={props.onShowModal} />, document.getElementById("formModal-root"))}
     </React.Fragment>
   );
 };

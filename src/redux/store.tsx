@@ -11,33 +11,27 @@ const initialState: IFlight = {
   dateArrival: dayjs(new Date()).format(),
   dateDeparture: dayjs(new Date()).format(),
   flightNumber: "",
+  flights: [],
 };
 
 const flightFormReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.SET_REGISTRATION:
-      return { ...state, aircraftRegistration: action.aircraftRegistration };
-    case types.SET_TYPE:
-      return { ...state, aircraftType: action.aircraftType };
-    case types.SET_DATE_ARRIVAL:
-      return { ...state, dateArrival: dayjs(new Date(action.dateArrival)).format };
-    case types.SET_DATE_DEPARTURE:
-      return { ...state, dateDeparture: dayjs(new Date(action.dateDeparture)).format };
-    case types.SET_FLIGHT_NUMBER:
-      return { ...state, flightNumber: action.flightNumber };
-    case types.SET_FLIGHT:
+    case types.CREATE_FLIGHT:
       return {
         ...state,
-        key: action.flight.key,
-        aircraftRegistration: action.flight.aircraftRegistration,
-        aircraftType: action.flight.aircraftType,
-        dateArrival: dayjs(new Date(action.flight.dateArrival)).format,
-        dateDeparture: dayjs(new Date(action.flight.dateArrival)).format,
-        flightNumber: action.flight.flightNumber,
+        flights: [...state.flights, action.flight],
       };
     case types.SET_FLIGHTS:
       return { ...state, flights: formatAllFlights(action.flights) };
-    case types.SET_DELETE:
+    case types.UPDATE_FLIGHT:
+      return {
+        ...state,
+        flights: state.flights.map((tempFlight) => {
+          if (tempFlight.key === action.flight.key) return action.flight;
+          else return tempFlight;
+        }),
+      };
+    case types.DELETE_FLIGHT:
       return { ...state, flights: state.flights.filter((obj) => obj.key !== action.key) };
     default:
       return state;

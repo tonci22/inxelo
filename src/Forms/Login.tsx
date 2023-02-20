@@ -13,7 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const [, setAuthenticated] = useState(localStorage.getItem("authenticated") || false);
 
-  const users = [{ username: "Ante", password: "test" }];
+  const users = [{ username: "admin", password: "admin" }];
 
   const formSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();

@@ -14,11 +14,11 @@ const CustomDateTimePicker = (props: Props) => {
     <Box autoComplete="off" style={{ padding: "10px", maxWidth: "250px", marginLeft: "40px" }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateTimePicker
+          renderInput={(params) => <TextField {...params} sx={{ margin: "10px" }} />}
           label={props.label}
           disablePast
           value={props.value}
           onChange={props.onChange}
-          renderInput={(params) => <TextField {...params} sx={{ margin: "10px" }} />}
         />
       </LocalizationProvider>
     </Box>

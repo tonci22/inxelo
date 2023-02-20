@@ -17,16 +17,16 @@ import dayjs, { Dayjs } from "dayjs";
 type Props = {
   onShowModal: () => void;
   onChange: () => void;
-  onReRender: () => void;
   value: IFlight;
 };
 
 const Modal = (props: Props) => {
-  
   const [registration, setRegistration] = useState<string>(props.value.aircraftRegistration);
   const [type, setType] = useState<string>(props.value.aircraftType);
   const [dateTimePickerArrival, setDateTimePickerArrival] = useState<Dayjs | null>(dayjs(new Date(props.value.dateArrival)));
-  const [dateTimePickerDeparture, setDateTimePickerDeparture] = useState<Dayjs | null>(dayjs(new Date(props.value.dateDeparture)));
+  const [dateTimePickerDeparture, setDateTimePickerDeparture] = useState<Dayjs | null>(
+    dayjs(new Date(props.value.dateDeparture))
+  );
   const [flightNumber, setFlightNumber] = useState<string>(props.value.flightNumber);
 
   const dispatch = useDispatch();
@@ -43,11 +43,10 @@ const Modal = (props: Props) => {
       flightNumber: flightNumber,
     };
 
-    axios.put(flightLinkWithKey(props.value.key), flightData).then(() => {
-      dispatch({ type: types.SET_FLIGHT, flight: flightData });
-      props.onReRender();
+    axios.put(flightLinkWithKey(props.value.key), flightData).then((response) => {
+      dispatch({ type: types.UPDATE_FLIGHT, flight: response.data });
     });
-    console.log(flightData);
+
     props.onShowModal(false);
   };
 
@@ -64,27 +63,19 @@ const Modal = (props: Props) => {
           <h2>Edit flight information</h2>
         </header>
         <div className={styles.message}>
-          <CustomTextInput
-            label="Registration"
-            value={registration}
-            onChange={(e) => setRegistration(e.target.value)}
-          ></CustomTextInput>
-          <CustomTextInput label="Type" value={type} onChange={(e) => setType(e.target.value)}></CustomTextInput>
+          <CustomTextInput label="Registration" value={registration} onChange={(e) => setRegistration(e.target.value)} />
+          <CustomTextInput label="Type" value={type} onChange={(e) => setType(e.target.value)} />
           <CustomDateTimePicker
             label="Date of Arrival"
             value={dateTimePickerArrival}
-            onChange={(e) => setDateTimePickerArrival(e.target.value)}
+            onChange={(e) => setDateTimePickerArrival(e)}
           />
           <CustomDateTimePicker
             label="Date of Departure"
             value={dateTimePickerDeparture}
-            onChange={(e) => setDateTimePickerDeparture(e.target.value)}
+            onChange={(e) => setDateTimePickerDeparture(e)}
           />
-          <CustomTextInput
-            label="Flight Number"
-            value={flightNumber}
-            onChange={(e) => setFlightNumber(e.target.value)}
-          ></CustomTextInput>
+          <CustomTextInput label="Flight Number" value={flightNumber} onChange={(e) => setFlightNumber(e.target.value)} />
         </div>
         <footer className={styles.button}>
           <CustomButton onClick={props.onShowModal}>CANCEL</CustomButton>
@@ -99,7 +90,7 @@ const FlightEditForm = (props: Props) => {
     <React.Fragment>
       <CustomBackdrop onShowModal={props.onShowModal} />
       {ReactDOM.createPortal(
-        <Modal value={props.value} onShowModal={props.onShowModal} onReRender={props.onReRender} />,
+        <Modal value={props.value} onShowModal={props.onShowModal} />,
         document.getElementById("formModal-root")
       )}
     </React.Fragment>

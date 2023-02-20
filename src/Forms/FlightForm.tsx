@@ -5,27 +5,23 @@ import FlightEditForm from "./FlightEditForm.tsx";
 import axios from "axios";
 import Card from "../Helpers/Card.tsx";
 import styles from "./FlightForm.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { types } from "../redux/store.tsx";
 import { flightLinkWithKey } from "../Service/APILink.tsx";
 
 type Props = {
   value: IFlight;
-  onReRender: () => void;
 };
 
 const FlightForm = (props: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [mouseOver, setMouseOver] = useState(false);
-  const flights = useSelector((state) => state.flights);
 
   const dispatch = useDispatch();
 
   const deleteHandler = () => {
     axios.delete(flightLinkWithKey(props.value.key)).then(() => {
-      dispatch({ type: types.SET_DELETE, key: props.value.key });
-      console.log("After deletion: " + flights);
-      //props.onReRender();
+      dispatch({ type: types.DELETE_FLIGHT, key: props.value.key });
     });
   };
 
@@ -47,7 +43,7 @@ const FlightForm = (props: Props) => {
         <CustomButton onClick={deleteHandler}>DELETE</CustomButton>
         <CustomButton onClick={() => setShowModal(true)}>EDIT</CustomButton>
       </div>
-      {showModal && <FlightEditForm value={props.value} onShowModal={() => setShowModal(false)} onReRender={props.onReRender} />}
+      {showModal && <FlightEditForm value={props.value} onShowModal={() => setShowModal(false)} />}
     </Card>
   );
 };
