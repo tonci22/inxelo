@@ -6,6 +6,8 @@ type Props = {
   label: string;
   value: string;
   defaulfValue: string;
+  error: boolean;
+  helperText: string | null;
   onChange: () => void;
 };
 
@@ -16,6 +18,8 @@ const CustomTextInput = (props: Props) => {
       defaultValue={props.defaulfValue}
       value={props.value}
       label={props.label}
+      error={props.error}
+      helperText={props.error ? props.helperText : null}
       style={{ margin: "10px" }}
       onChange={props.onChange}
     ></TextField>

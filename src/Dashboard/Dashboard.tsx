@@ -13,7 +13,7 @@ import formatAllFlights from "../HelperMethods/FormatAPIData.tsx";
 const Dashboard = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const flights = useSelector((state) => state.flights);
+  const flights = useSelector((state: IFlight) => state.flights);
 
   let allFlights: IFlight[] = [];
 
